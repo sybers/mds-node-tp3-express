@@ -1,0 +1,10 @@
+extends ../layout.pug
+
+block content
+  div(class="p-4")
+    h1(class="text-center text-4xl font-bold") Most recent articles
+    each article in articles
+      div(class="mb-4")
+        h3(class="mb-1 text-xl font-bold")= article.title
+        p(class="mb-2")=article.body
+        a(class="px-2 p-1 border-2 border-blue-500 rounded-md hover:bg-blue-500 hover:text-white", href=`/articles/${article.id}`) Read more →

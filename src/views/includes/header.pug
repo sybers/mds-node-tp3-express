@@ -1,0 +1,14 @@
+nav.flex.items-center.justify-between.flex-wrap.bg-blue-500.p-6
+    .flex.items-center.flex-shrink-0.text-white.mr-6
+        span.font-semibold.text-xl.tracking-tight Blog
+    .block(class='lg:hidden')
+        button#header-mobile-toggle.flex.items-center.px-3.py-2.border.rounded.text-blue-200.border-blue-400(class='hover:text-white hover:border-white')
+            svg.fill-current.h-3.w-3(viewbox='0 0 20 20' xmlns='http://www.w3.org/2000/svg')
+                title Menu
+                path(d='M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z')
+    #header-menu.w-full.block.flex-grow(class='hidden lg:flex lg:items-center lg:w-auto')
+        .text-sm(class='lg:flex-grow')
+            a.block.mt-4.text-blue-200.mr-4(href='/articles' class='lg:inline-block lg:mt-0 hover:text-white') Recent
+            a.block.mt-4.text-blue-200.mr-4(href='/categories' class='lg:inline-block lg:mt-0 hover:text-white') Categories
+        div
+            a.inline-block.text-sm.px-4.py-2.leading-none.border.rounded.text-white.border-white.mt-4(href='#' class='hover:border-transparent hover:text-blue-500 hover:bg-white lg:mt-0') Log in
