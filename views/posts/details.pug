@@ -1,0 +1,15 @@
+extends ../layout.pug
+
+block content
+  div
+    a(href=`/posts`) ← Back to posts
+
+    h1=post.title
+    p Posted on #{post.createdAt}
+    pre=post.body
+
+    a(href=`/posts/${post.id}/update`)
+      button Update
+
+    form(action=`/posts/${post.id}/delete` method="post")
+      button(type="submit") Delete post

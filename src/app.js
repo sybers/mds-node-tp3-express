@@ -1,25 +1,32 @@
 const path = require("path");
 const express = require("express");
-const frontendRouter = require("./routes/frontend");
-const apiRouter = require("./routes/api");
-
-const PORT = parseInt(process.env.PORT ?? "8080", 10);
+const helmet = require("helmet");
+const globalRouter = require("./routes");
 
 const app = express();
 
-app.set("views", path.resolve(__dirname, "views"));
+app.set("views", path.resolve(__dirname, "..", "views"));
 app.set("view engine", "pug");
 
-app.use(express.json());
+app.use(helmet());
+app.use(express.urlencoded({ extended: true }));
 
-app.use("/", frontendRouter);
-app.use("/api", apiRouter);
+app.use("/", globalRouter);
 
 app.use(express.static(path.resolve(__dirname, "..", "public")));
 
-app.use((err, _req, res, _next) => {
-  res.status(500);
-  res.json({ status: 500, error: err.message });
+// Handle 404 errors by rendering the errors/404.pug page
+app.use(function (req, res, next) {
+  res.status(404);
+  res.render("errors/404");
 });
 
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+if (process.env.NODE_ENV === "development") {
+  app.use((err, _req, res, _next) => {
+    console.error(err);
+    res.status(500);
+    res.json({ status: 500, error: "Internal Server Error" });
+  });
+}
+
+module.exports = app;

@@ -1,0 +1,10 @@
+extends ../layout.pug
+
+block content
+  div
+    a(href=`/posts`) ← Back to posts
+
+    form(action="/posts" method="post")
+      input(type="text" name="title" placeholder="Post title")
+      textarea(name="body" cols="30" rows="10" placeholder="Post content")
+      button(type="submit") Create post

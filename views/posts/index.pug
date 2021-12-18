@@ -1,0 +1,15 @@
+extends ../layout.pug
+
+block content
+  div
+    h1 Most recent posts
+    a(href="/posts/create") Create post
+    if showAll
+      p Showing all posts #[a(href="/posts") Only show published]
+    else
+      p Only showing published posts #[a(href="/posts?all=true") Show all]
+    each post in posts
+      div
+        h3= post.title
+        p=post.body
+        a(href=`/posts/${post.id}`) Read more →

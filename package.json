@@ -4,14 +4,15 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "dev": "nodemon src/app.js",
-    "init": "node src/init-db.js"
+    "dev": "nodemon src/server.js",
+    "init": "node scripts/create-db.js"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
+    "helmet": "^4.6.0",
     "pug": "^3.0.2",
     "sqlite3": "^5.0.2"
   }
