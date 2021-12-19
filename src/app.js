@@ -11,7 +11,7 @@ app.set("view engine", "pug");
 
 app.use(helmet());
 
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: false }));
 
 app.use("/", globalRouter);
 

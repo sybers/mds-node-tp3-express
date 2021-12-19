@@ -8,7 +8,7 @@ const create = Joi.object({
 const update = Joi.object({
   title: Joi.string().min(3).max(2000),
   body: Joi.string(),
-  isPublished: Joi.string().valid("on"),
+  isPublished: Joi.any(), // just check for the presence of the field
 });
 
 module.exports = {
