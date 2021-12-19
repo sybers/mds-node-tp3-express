@@ -1,5 +1,8 @@
 extends ../layout.pug
 
+block variables
+  - const title = 'Update Post'
+
 block content
   div
     a(href=`/posts/${post.id}`) ← Back to posts details

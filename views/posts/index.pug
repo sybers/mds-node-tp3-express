@@ -1,5 +1,8 @@
 extends ../layout.pug
 
+block variables
+  - const title = 'Latest Posts'
+
 block content
   div
     h1 Most recent posts
@@ -11,5 +14,7 @@ block content
     each post in posts
       div
         h3= post.title
-        p=post.body
+        if !post.isPublished
+          small (Draft)
+        pre(style="background-color:lightgray; padding: 8px")=post.body
         a(href=`/posts/${post.id}`) Read more →

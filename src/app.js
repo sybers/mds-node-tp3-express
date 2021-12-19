@@ -1,6 +1,7 @@
 const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
+const httpErrors = require("http-errors");
 const globalRouter = require("./routes");
 
 const app = express();
@@ -9,24 +10,20 @@ app.set("views", path.resolve(__dirname, "..", "views"));
 app.set("view engine", "pug");
 
 app.use(helmet());
-app.use(express.urlencoded({ extended: true }));
+
+app.use(express.urlencoded());
 
 app.use("/", globalRouter);
 
 app.use(express.static(path.resolve(__dirname, "..", "public")));
 
-// Handle 404 errors by rendering the errors/404.pug page
-app.use(function (req, res, next) {
-  res.status(404);
-  res.render("errors/404");
-});
+app.use("*", (_req, _res, next) => next(new httpErrors.NotFound()));
 
-if (process.env.NODE_ENV === "development") {
-  app.use((err, _req, res, _next) => {
-    console.error(err);
-    res.status(500);
-    res.json({ status: 500, error: "Internal Server Error" });
-  });
-}
+app.use((err, _req, res, next) => {
+  if (!httpErrors.isHttpError(err)) next(err);
+
+  res.status(err.statusCode);
+  res.render(`errors/${err.statusCode}`);
+});
 
 module.exports = app;

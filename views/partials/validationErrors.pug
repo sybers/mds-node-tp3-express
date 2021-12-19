@@ -1,0 +1,6 @@
+if validationErrors
+  div
+    h2 Validation errors
+    ul
+      each error in validationErrors.details
+        li= error.message
