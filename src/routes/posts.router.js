@@ -1,4 +1,5 @@
 const express = require("express");
+const asyncHandler = require("express-async-handler");
 const httpErrors = require("http-errors");
 
 const postsService = require("../services/posts.service");
@@ -7,80 +8,86 @@ const postsValidators = require("../validators/posts");
 
 const router = express.Router();
 
-router.get("/", (req, res, next) => {
-  const showAll = req.query.all;
+router.get(
+  "/",
+  asyncHandler(async (req, res) => {
+    const showAll = req.query.all;
+    const posts = await postsService.findAll({ publishedOnly: !showAll });
 
-  postsService
-    .findAll({ publishedOnly: !showAll })
-    .then((posts) => res.render("posts/index", { posts, showAll }))
-    .catch(next);
-});
+    res.render("posts/index", {
+      showAll,
+      posts,
+    });
+  })
+);
 
-router.post("/", validate(postsValidators.create), (req, res, next) => {
-  postsService
-    .create(req.body)
-    .then(() => res.redirect("/posts"))
-    .catch(next);
-});
+router.post(
+  "/",
+  validate(postsValidators.create),
+  asyncHandler(async (req, res) => {
+    await postsService.create(req.body);
 
-router.get("/create", (req, res) => {
+    res.redirect("/posts");
+  })
+);
+
+router.get("/create", (_req, res) => {
   res.render("posts/create");
 });
 
-router.get("/:id(\\d+)", (req, res, next) => {
-  postsService
-    .find(req.params.id)
-    .then((post) => {
-      if (!post) throw new httpErrors.NotFound();
+router.get(
+  "/:id(\\d+)",
+  asyncHandler(async (req, res) => {
+    const post = await postsService.find(req.params.id);
+    if (!post) {
+      throw new httpErrors.NotFound();
+    }
 
-      res.render("posts/details", {
-        title: post.title,
-        post,
-      });
-    })
-    .catch(next);
-});
+    res.render("posts/details", {
+      title: post.title,
+      post,
+    });
+  })
+);
 
-router.get("/:id(\\d+)/update", (req, res, next) => {
-  postsService
-    .find(req.params.id)
-    .then((post) => {
-      if (!post) throw new httpErrors.NotFound();
+router.get(
+  "/:id(\\d+)/update",
+  asyncHandler(async (req, res) => {
+    const post = await postsService.find(req.params.id);
+    if (!post) {
+      throw new httpErrors.NotFound();
+    }
 
-      res.render("posts/update", { post });
-    })
-    .catch(next);
-});
+    res.render("posts/update", {
+      post,
+    });
+  })
+);
 
 router.post(
   "/:id(\\d+)/update",
   validate(postsValidators.update),
-  (req, res, next) => {
+  asyncHandler(async (req, res) => {
     if (!req.validation.isValid) {
-      res.status(400);
-      return postsService
-        .find(req.params.id)
-        .then((post) =>
-          res.render("posts/update", {
-            validationErrors: req.validation.errors,
-            post,
-          })
-        )
-        .catch(next);
+      const post = await postsService.find(req.params.id);
+
+      return res.status(400).render("posts/update", {
+        validationErrors: req.validation.errors,
+        post,
+      });
     }
 
-    postsService
-      .update(req.params.id, req.body)
-      .then(() => res.redirect("/posts"))
-      .catch(next);
-  }
+    await postsService.update(req.params.id, req.body);
+    res.redirect("/posts");
+  })
 );
 
-router.post("/:id/delete", (req, res, next) => {
-  postsService
-    .remove(req.params.id)
-    .then(() => res.redirect("/posts"))
-    .catch(next);
-});
+router.post(
+  "/:id(\\d+)/delete",
+  asyncHandler(async (req, res) => {
+    await postsService.remove(req.params.id);
+    res.redirect("/posts");
+  })
+);
 
 module.exports = router;
