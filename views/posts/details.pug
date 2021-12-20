@@ -8,6 +8,18 @@ block content
     p Posted on #{post.createdAt}
     pre=post.body
 
+    h2 Comments
+    form(action=`/posts/${post.id}/add-comment` method="post")
+      textarea(name="content" cols="60" rows="3")
+      br
+      button(type="submit") Add comment
+    each comment in comments
+      ul
+        li
+          h5 By Anonymous
+          pre= comment.createdAt
+          p= comment.content
+
     a(href=`/posts/${post.id}/update`)
       button Update
 
