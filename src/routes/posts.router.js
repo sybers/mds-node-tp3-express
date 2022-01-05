@@ -46,7 +46,6 @@ router.get(
     }
 
     const comments = await commentsService.findByPostId(post.id);
-    console.log(comments);
 
     res.render("posts/details", {
       title: post.title,
@@ -104,6 +103,21 @@ router.post(
     }
 
     await commentsService.addToPost(req.params.id, req.body);
+    res.redirect(`/posts/${post.id}`);
+  })
+);
+
+router.post(
+  "/:id(\\d+)/comments/:commentId(\\d+)/delete",
+  asyncHandler(async (req, res) => {
+    const post = await postsService.find(req.params.id);
+    if (!post) throw new httpErrors.NotFound();
+
+    const comment = commentsService.find(req.params.commentId);
+    if (!comment) throw new httpErrors.NotFound();
+
+    await commentsService.remove(req.params.commentId);
+
     res.redirect(`/posts/${post.id}`);
   })
 );

@@ -2,7 +2,14 @@ const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
 const httpErrors = require("http-errors");
-const globalRouter = require("./routes");
+const appRoutes = require("./routes");
+
+function truncate(str, n) {
+  if (!str.length > n) {
+    return str;
+  }
+  return `${str.substr(0, n - 1)}...`;
+}
 
 const app = express();
 
@@ -13,7 +20,12 @@ app.use(helmet());
 
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/", globalRouter);
+app.use((req, res, next) => {
+  res.locals.truncate = truncate;
+  next();
+});
+
+app.use("/", appRoutes);
 
 app.use(express.static(path.resolve(__dirname, "..", "public")));
 

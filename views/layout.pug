@@ -5,14 +5,16 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title #{title} - My Blog
+    title #{title} - Express Blog
     block styles
+      link(rel="stylesheet" href="/styles/pico.min.css")
       link(rel="stylesheet" href="/styles/app.css")
   body
-    block body
-      include partials/header.pug
-      include partials/validationErrors.pug
-      block content
-    block scripts
-      script(src="/scripts/app.js")
-    include partials/footer.pug
+    main.container
+      block body
+        include partials/header.pug
+        include partials/validationErrors.pug
+        block content
+      block scripts
+        script(src="/scripts/app.js")
+      include partials/footer.pug

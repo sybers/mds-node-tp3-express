@@ -4,24 +4,26 @@ block content
   div
     a(href=`/posts`) ← Back to posts
 
+    hr
+
     h1=post.title
     p Posted on #{post.createdAt}
-    pre=post.body
+    .post-content=post.body
 
-    h2 Comments
+    h2 Comments (#{comments.length})
     form(action=`/posts/${post.id}/add-comment` method="post")
-      textarea(name="content" cols="60" rows="3")
+      textarea(name="content" cols="60" rows="3" placeholder="Write some text...")
       br
-      button(type="submit") Add comment
+      button(type="submit").inline Add comment
     each comment in comments
-      ul
-        li
-          h5 By Anonymous
-          pre= comment.createdAt
-          p= comment.content
+      article
+        header
+          strong By Anonymous 
+          small on #{comment.createdAt}
+          form(action=`/posts/${post.id}/comments/${comment.id}/delete` method="post")
+            button.inline Delete
+        div= comment.content
 
-    a(href=`/posts/${post.id}/update`)
-      button Update
-
-    form(action=`/posts/${post.id}/delete` method="post")
-      button(type="submit") Delete post
+    a(href=`/posts/${post.id}/update` role="button" style="margin-right: 12px").outline Update
+    form(action=`/posts/${post.id}/delete` method="post").inline
+      button.inline.contrast Delete post

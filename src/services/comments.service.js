@@ -1,5 +1,9 @@
 const db = require("../db");
 
+async function find(id) {
+  return db.get("SELECT * FROM comments WHERE (id = ?)", [id]);
+}
+
 async function findByPostId(postId) {
   return db.all(
     "SELECT * FROM comments WHERE (postId = ?) ORDER BY createdAt DESC",
@@ -19,6 +23,7 @@ async function remove(id) {
 }
 
 module.exports = {
+  find,
   findByPostId,
   addToPost,
   remove,

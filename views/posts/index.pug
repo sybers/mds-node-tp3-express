@@ -5,16 +5,19 @@ block variables
 
 block content
   div
-    h1 Most recent posts
-    a(href="/posts/create") Create post
+    h1 Latest posts
+    a(href="/posts/create" role="button") Create post
+    br
+    br
     if showAll
-      p Showing all posts #[a(href="/posts") Only show published]
+      a(href="/posts") Show published only
     else
-      p Only showing published posts #[a(href="/posts?all=true") Show all]
+      a(href="/posts?all=true") Show all
     each post in posts
       div
+        hr
         h3= post.title
         if !post.isPublished
           small (Draft)
-        pre(style="background-color:lightgray; padding: 8px")=post.body
+        div(style="margin-bottom: 12px").post-content= truncate(post.body, 240)
         a(href=`/posts/${post.id}`) Read more →
