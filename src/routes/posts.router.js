@@ -2,6 +2,8 @@ const express = require("express");
 const asyncHandler = require("express-async-handler");
 const httpErrors = require("http-errors");
 
+const upload = require("../middlewares/upload");
+
 const postsService = require("../services/posts.service");
 const commentsService = require("../services/comments.service");
 const validate = require("../middlewares/validate");
@@ -26,8 +28,13 @@ router.get(
 router.post(
   "/",
   validate(postsValidators.create),
+  upload.single("image"),
   asyncHandler(async (req, res) => {
-    await postsService.create(req.body);
+    console.log(req.file);
+    const imageURL = `${req.protocol}://${req.get("host")}/uploads/${
+      req.file.filename
+    }`;
+    await postsService.create({ ...req.body, imageURL });
 
     res.redirect("/posts");
   })

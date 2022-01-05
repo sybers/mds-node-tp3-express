@@ -26,7 +26,7 @@ db.serialize(() => {
 
   // create posts table
   db.run(
-    "CREATE TABLE posts (id INTEGER PRIMARY KEY, title TEXT, body TEXT, isPublished INTEGER, createdAt TEXT)"
+    "CREATE TABLE posts (id INTEGER PRIMARY KEY, title TEXT, imageURL TEXT, body TEXT, isPublished INTEGER, createdAt TEXT)"
   );
 
   // create comments table

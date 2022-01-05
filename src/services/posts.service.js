@@ -12,10 +12,10 @@ async function find(id) {
   return db.get("SELECT * FROM posts WHERE (id = ?)", [id]);
 }
 
-async function create({ title, body }) {
+async function create({ title, body, imageURL }) {
   return db.run(
-    'INSERT INTO posts (title, body, ispublished, createdAt) VALUES (?, ?, TRUE, datetime("now"))',
-    [title, body]
+    'INSERT INTO posts (title, imageURL, body, ispublished, createdAt) VALUES (?, ?, ?, TRUE, datetime("now"))',
+    [title, imageURL, body]
   );
 }
 

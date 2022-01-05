@@ -2,14 +2,9 @@ const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
 const httpErrors = require("http-errors");
-const appRoutes = require("./routes");
 
-function truncate(str, n) {
-  if (!str.length > n) {
-    return str;
-  }
-  return `${str.substr(0, n - 1)}...`;
-}
+const renderUtils = require("./middlewares/render-utils");
+const appRoutes = require("./routes");
 
 const app = express();
 
@@ -20,10 +15,7 @@ app.use(helmet());
 
 app.use(express.urlencoded({ extended: false }));
 
-app.use((req, res, next) => {
-  res.locals.truncate = truncate;
-  next();
-});
+app.use(renderUtils);
 
 app.use("/", appRoutes);
 

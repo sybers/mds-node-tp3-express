@@ -9,7 +9,8 @@ block content
 
     h1 New Post
 
-    form(action="/posts" method="post")
+    form(action="/posts" method="post" enctype="multipart/form-data")
       input(type="text" name="title" placeholder="Title")
+      input(type="file" name="image")
       textarea(name="body" cols="30" rows="10" placeholder="Content")
       button(type="submit") Create post
